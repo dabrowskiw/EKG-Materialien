@@ -42,6 +42,7 @@
 - Gerne auch lokal installieren und ausprobieren, sprengt aber den Rahmen hier
 - Einfach mitmachen und ausprobieren
 - Abgabe: Kurzes "Paper" zu einem beliebigen Thema, mit mindestens:
+  - Angabe des Autors (oder der Autoren bei Gruppenabgabe, bis 3 Personen)
   - 1 Abbildung (mit Unterschrift)
   - 1 Tabelle (mit Unterschrift)
   - 2 Quellenangaben (im Text zitiert)
