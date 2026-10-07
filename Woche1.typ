@@ -325,6 +325,8 @@ Grundidee von Typst:
 - Jeder Content-Block hat Eigenschaften (Farbe, Position etc.)
 - Content-Blöcke können durch Befehle verändert werden
 
+#v(-0.2cm)
+
 #grid(
   columns: 2,
   gutter: 1em, 
@@ -332,12 +334,11 @@ Grundidee von Typst:
     #codly(
       highlights: (
         (line: 1, start: 0, end: none, tag: [Content block]),
-        (line: 3, start: 0, end: none, tag: [Content block]),
+        (line: 2, start: 0, end: none, tag: [Content block]),
       )
     )
     ```typst
     Das ist Text.
-
     Das ist mehr Text.
     ```
   ],
@@ -345,11 +346,13 @@ Grundidee von Typst:
     #image("typ1.jpg")
   ]
 )
+#v(-1cm)
 
-Drei Modi:
+Vier Modi:
 - Textmodus: Text wird direkt zu Text in der PDF
 - Befehlsmodus: Verändert Eigenschaften eines Content-Blocks, Text sind Befehle, Argumente oder Variblennamen
 - Mathematik-Modus: Spezielle Minisprache für Formeln
+- Code-Modus: ``` `code` ``` oder ```` ```code``` ```` für syntax highlighting
 
 == Befehlsmodus
 
@@ -400,6 +403,14 @@ Wechseln von Befehls- in Textmodus: `[Text]`.
 )
 ```typst
 Das ist #text(fill: red, [Text]).
+```
+
+#pause
+
+Randnotiz: Implizit ist jeder Inhalt im Text-Modus `#text("Inhalt")`:
+
+```typst
+#text("Das ist ")#text(fill: red, [Text]).
 ```
 
 == Mischen von Modi
@@ -489,6 +500,94 @@ Häufig in Text:
     #image("typ4.jpg")
   ]
 )
+
+== Spezialfunktion: `#set`
+
+Häufige Anforderung: Alle Elemente einer Sorte gleich machen, z.B.: Alle Boxen grün.
+
+#uncover(2)[#sym.arrow `#set befehl(arguments)`: Für alle Vorkommen von `befehl` Standard-Argumente setzen.]
+
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    #only(1)[
+      ```typst
+        #box(fill: silver, stroke: 1pt+black, inset: 4pt)[Das ist eine Box.]
+
+        #box(fill: silver, stroke: 1pt+black, inset: 4pt)[Das ist auch eine Box.]
+
+        Und das ist #box(fill: silver, stroke: 1pt+black, inset: 4pt)[Text in einer Box].
+      ```
+    ]
+    #only(2)[
+      ```typst
+      #set box(fill: silver, stroke: 1pt+black, inset: 4pt)
+
+      #box()[Das ist eine Box.]
+
+      #box()[Das ist auch eine Box.]
+
+      Und das ist #box()[Text in einer Box].
+      ```
+    ]
+  ],
+  [
+    #image("typ5.jpg")
+  ]
+)
+
+#pagebreak()
+
+Erinnerung: Alles im Textmodus ist implizit `#text("Inhalt")` #sym.arrow Anpassung des ganzen Textes durch `#set`.
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    #only("1-")[
+      ```typst
+        = Eine Überschrift!
+
+        Und unter der Überschrift steht lauter Text.
+      ```
+    ]
+    #only("2-")[
+      ```typst
+        #set text(fill: red)
+
+        = Eine Überschrift!
+
+        Und unter der Überschrift steht lauter Text.
+      ```
+    ]
+    #only("3-")[
+      ```typst
+        #set text(fill: red, style: "italic")
+
+        = Eine Überschrift!
+
+        Und unter der Überschrift steht lauter Text.
+      ```
+    ]
+  ],
+  [
+    #only("1-")[
+      #image("typ6.jpg")
+    ]
+    #only("2-")[
+      #image("typ7.jpg")
+    ]
+    #only("3-")[
+      #image("typ8.jpg")
+    ]
+  ]
+)
+
+#pagebreak()
+
+Alles im Textmodus ist implizit in `#text()` - alles auf einer Seite ist implizit in `#page()` #sym.arrow Dokument-Formatierung mit `#set page(...)`
 
 == Blub
 
