@@ -27,8 +27,12 @@
 
 == Benotung
 
-Zu jedem Thema (-> ca. alle 2 Wochen) eine halbe Seite A4 Takeaway ("Was habe ich aus diesem Teil der Veranstaltung für mich mitgenommen?") schreiben und in Moodle abgeben. Jede Abgabe wird benotet als:
+Zu jedem Thema (-> ca. alle 2 Wochen) eine Abgabe in Moodle. 
+  - Meist: halbe Seite A4 Takeaway ("Was habe ich aus diesem Teil der Veranstaltung für mich mitgenommen?") schreiben und in Moodle abgeben.
+  - Abhängig von Thema, Typst: 2 Abgaben (1/Woche)
+  - Deadlines beachten, sonst: 0 Punkte!
 
+Jede Abgabe wird benotet als:
 - Nicht bestanden
 - Bestanden
   - Besonders gut bestanden (+1 Bonus)
@@ -47,26 +51,6 @@ Grundnote nach Anzahl der bestandenen Abgaben:
 - Mehr als 4x nicht bestanden: 5
 
 Gesamtnote: Grundnote #linebreak()+ je eine Notenstufe pro Bonuspunkt #linebreak()- je eine Notenstufe pro Maluspunkt 
-
-= Kennlern-Pause
-
-== Eigenschaften-Bingo
-
-- Personen mit Gemeinsamkeiten finden, Name eintragen
-- Jeder Name nur für ein Feld, Bingo: 4 in Zeile/Spalte/diagnoal
-
-#grid(
-  columns: 4,
-  rows: 4,
-  gutter: 0.1cm,
-  inset: 0.4cm,
-  align: center,
-  stroke: (thickness: 1pt),
-  "Lieblingsessen", "Anzahl Geschwister", "Sport (Hobby)", "Kunst (Hobby)",
-  "Geburtsmonat", "Anzahl Vornamen", "Lieblingsbuch", "Haustier",
-  "Geburtsjahr", "Augenfarbe", "Kleidungsstück (Farbe)", "Land besucht",
-  "Stadtteil (Wohnung)", "Lieblingsfilm", "Fernseher (ja/nein)", "Musikrichtung"
-)
 
 = Textverarbeitung
 
@@ -298,11 +282,216 @@ Es gibt #link("https://tinyurl.com/mpz7v5w7")[schöne Orte] auf der Welt, siehe 
   ]
 )
 
+Randnotiz: Diese Folien sind #link("https://github.com/dabrowskiw/EKG-Materialien/blob/main/Woche1.typ")[in typst geschrieben].
 
-== Typst-Kurzüberblick
+= Kennlern-Pause
 
-- Langfristig sinnvoll: Typst-Compiler von #link("https://github.com/typst/typst")[github-Seite] installieren
-- Heute: #link("https://typst.app/play/")[Online-Editor verwenden]
+== Eigenschaften-Bingo
+
+- Personen mit Gemeinsamkeiten finden, Name eintragen
+- Jeder Name nur für ein Feld, Bingo: 4 in Zeile/Spalte/diagnoal
+
+#grid(
+  columns: 4,
+  rows: 4,
+  gutter: 0.1cm,
+  inset: 0.4cm,
+  align: center,
+  stroke: (thickness: 1pt),
+  "Lieblingsessen", "Anzahl Geschwister", "Sport (Hobby)", "Kunst (Hobby)",
+  "Geburtsmonat", "Anzahl Vornamen", "Lieblingsbuch", "Haustier",
+  "Geburtsjahr", "Augenfarbe", "Kleidungsstück (Farbe)", "Land besucht",
+  "Stadtteil (Wohnung)", "Lieblingsfilm", "Fernseher (ja/nein)", "Musikrichtung"
+)
+
+== Typst-Verwendung
+
+- Langfristig sinnvoll: 
+  - Typst-Compiler von #link("https://github.com/typst/typst")[github-Seite] installieren
+  - Mit beliebigem *Text*-Editor Dateien bearbeiten, z.B.:
+    - #link("https://notepad-plus-plus.org/")[Notepad++]: Nur Windows, generisch für alle Text-Dateien
+    - #link("https://vscodium.com/")[VSCodium]: Populäre IDE für diverse Sprachen, hat Typst-Plugin
+  - Mit Compiler PDF erstellen: `typst compile in.typ out.pdf`
+- Zum lokalen Ausprobieren: #link("https://katvan.app/")[Katvan]: Cross-platform, Typst-spezifisch
+- Schnelle Alternative: #link("https://typst.app/play/")[Online-Editor verwenden]
+  - Kostenlos, ohne Registrierung
+  - Mit Registrierung: Upload von Bildern, mehrere Dateien pro Projekt
+Für heute: Katvan, oder online mit Registrierung
+
+== Typst-Grundlagen: Modi
+
+Grundidee von Typst: 
+- Alles ist ein "Content-Block" #sym.arrow am Ende in PDF
+- Jeder Content-Block hat Eigenschaften (Farbe, Position etc.)
+- Content-Blöcke können durch Befehle verändert werden
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    #codly(
+      highlights: (
+        (line: 1, start: 0, end: none, tag: [Content block]),
+        (line: 3, start: 0, end: none, tag: [Content block]),
+      )
+    )
+    ```typst
+    Das ist Text.
+
+    Das ist mehr Text.
+    ```
+  ],
+  [
+    #image("typ1.jpg")
+  ]
+)
+
+Drei Modi:
+- Textmodus: Text wird direkt zu Text in der PDF
+- Befehlsmodus: Verändert Eigenschaften eines Content-Blocks, Text sind Befehle, Argumente oder Variblennamen
+- Mathematik-Modus: Spezielle Minisprache für Formeln
+
+== Befehlsmodus
+
+- Befehle generieren (meist) neuen Content-Block, kriegen meist Content-Block zum Verändern als Eingabe
+- Befehlsmodus ausgeführt mit:
+  - `#`: Nächstes Wort ist Befehl, z.B. `#Befehl(Argumente)[Content-Block]` oder `#Befehl(Argumente, Content-Block)`
+  - `{ Befehle }`: Alles zwischen `{` und `}` ist Befehlsmodus (später)
+- Fast alle Formatierungen passieren durch Befehle in Befehlsmodus
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    ```typst
+Das ist #text(fill: red)[Text].
+
+#box(
+    stroke: 1pt+black, 
+    fill: aqua, 
+    inset: 4pt
+)[Das ist] mehr Text.
+    ```
+  ],
+  [
+    #image("typ2.jpg")
+  ]
+)
+
+== Textmodus
+
+Laut #link("https://typst.app/docs/reference/text/text/")[Typst-Dokumentation]: `#text(Argumente)[content]` oder `#text(Argumente, content)`. Aber:
+
+#codly(
+  annotations: (
+    (start: 1, end: 1, content: [#text(fill: red)[Fehler, Variable "Text" unbekannt]]),
+  )
+)
+```typst
+Das ist #text(fill: red, Text).
+```
+
+Wechseln von Befehls- in Textmodus: `[Text]`.
+
+#codly(
+  annotations: (
+    (start: 1, end: 1, content: [Funktioniert, `[Text]` ist Textmodus]),
+  )
+)
+```typst
+Das ist #text(fill: red, [Text]).
+```
+
+== Mischen von Modi
+
+Häufig wilde Mischung von Text- und Befehlsmodus:
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    ```typst
+#box(
+    stroke: 1pt+black, 
+    fill: silver, 
+    inset: 4pt,
+    [
+        Das hier ist 
+        #text(
+            fill: yellow, 
+            box(
+                fill: red, 
+                inset: 4pt, 
+                [wichtiger]
+            )
+        ) 
+        Text
+    ]
+)
+    ```
+  ],
+  [
+    #image("typ3.jpg")
+- Was ist in welchem Modus?
+- Warum kein `#` vor `box` in Zeile 9?
+  ]
+)
+
+== Shortcuts im Text-Modus
+
+Häufig in Text:
+- Überschriften, Zwischenüberschriften etc.#only(2)[: `=`, `==` etc.]
+- Aufzählungen#only(2)[: `-` bzw. `+` (nummeriert)]
+- Bold, italic#only(2)[: `*text*` bzw. `_text_`]
+
+#grid(
+  columns: 2,
+  gutter: 1em, 
+  [
+    #only(1)[
+      ```typst
+        #heading(level: 1)[Wichtig!]
+        #heading(level: 2)[Urwichtig]
+        Viele #text(weight: "bold")[wichtige] Dinge:
+        #list(
+            [Das ist wichtig],
+            [#text(style: "italic")[Das hier] ist wichtiger]
+        )
+        #heading(level: 2)[Vollwichtig]
+        #enum(
+            [Nummern!],
+            [Sieht gleich wichtiger aus!]
+        )
+      ```
+      #v(-0.6cm)
+      ...das ist aber schlecht zu lesen! So wäre LaTeX.
+    ]
+    #only(2)[
+      ```typst
+        = Wichtig!
+
+        == Urwichtig
+        
+        Viele *wichtige* Dinge:
+        - Das ist wichtig,
+        - _Das hier_ ist wichtiger.
+
+        == Vollwichtig
+        
+        + Nummern!
+        + Sieht gleich wichtiger aus!
+      ```
+      #v(-0.6cm)
+      #sym.arrow "Standard-Text" fast wie Markdown. 
+    ]
+  ],
+  [
+    #image("typ4.jpg")
+  ]
+)
+
+== Blub
+
 - Gemeinsam Grundlagen des #link("https://typst.app/docs/tutorial")[Typst-Tutorials] anschauen:
   - Grundlage: Alles ist Text, es sei denn, es steht `#` davor - dann Sprachelement (Funktion, Variable, Kontrollstruktur)
   - Text, Überschriften, Listen
@@ -452,4 +641,4 @@ Schreiben Sie in der Gruppe einen Kurzbericht über die Campus-Tour:
 - Ganz kurzer Text
 - Bilder mit Referenzen im Text (`#image` in `#figure`, referenziert mit `@label`)
 
-*Jede* Person aus der Gruppe gibt die PDF in Moodle als Abgabe für diesen Teil ab.
+*Jede* Person aus der Gruppe gibt d
