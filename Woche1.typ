@@ -14,16 +14,23 @@
 
 - Ablauf des Moduls
 - Benotung
-- Textverarbeitung
-  - Dateiformate
-  - Konvertierung
-  - Übung mit Typst
+- Textverarbeitung & Dateiformate
+- Kurze Unterbrechung
+- Einführung in Typst
+- Übungsaufgabe + Abgabe 1
 
 == Ablauf des Moduls
 
 - Profs und Dozierende stellen sich vor
 - Idee: Personen und Themen kennenlernen
-  - KW 41+42: Wojtek Dabrowski
+  - KW 42+43: Wojtek Dabrowski, Typst
+  - KW 44: NN
+  - KW 45-47: Thomas Manke, Big Data Analysis
+  - KW 48-49: Thomas Jung, Computergrafik+Mixed Reality
+  - KW 50-51: Habakuk Israel, Usability und UX
+  - KW 52: Exkursion (10 Plätze)
+  - KW 1+2: Andrea Knaut, Kulturinformatik
+  - KW 3: NN
 
 == Benotung
 
