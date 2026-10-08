@@ -598,11 +598,11 @@ email = "janey72@test.org"
 
 Dokument erstellen mit:
 
-- Drei figures (im Text referenziert):
-  - Einem #link("https://mermaid.ai/open-source/syntax/examples.html")[Mermaid-Chart] (anderer Typ als flowchart)
-  - Einem Gantt-Chart
-  - Einem Bild
-- Textfluss um alle 3 Figures herum (meander)
+- Einer Seite A4
+- Zwei figures (im Text referenziert):
+  - Ein Bild
+  - Ein mit Paket generiertes Bild, z.B. mit #link("https://typst.app/universe/package/lilaq/")[lilaq] 
+- Textfluss um beide Figures herum (meander)
 - Inhalt: Egal, kann auch `lorem()` sein.
 
 = Templating
@@ -634,9 +634,15 @@ Dokument erstellen mit:
 Bla Text
 ```
 
-== Templates bei typst universe
+== Typst Universe 
 
-- Beispiele für Templates auf typst universe
+Diverse Templates, die diese Techniken verwenden, sind im #link("https://typst.app/universe/search/?kind=templates")[Typst-Universe] vorhanden, z.B.:
+  - Journals wie #link("https://typst.app/universe/package/charged-ieee")[IEEE], #link("https://typst.app/universe/package/graceful-genetics")[Oxford Physics] oder #link("https://typst.app/universe/package/splendid-mdpi")[MDPI]
+    - Befolgen oft gleiche Standard #sym.arrow oft austauschbar
+    - Vorsicht, Argumentnamen für `#show` beachten!
+    - Gemeinsam online anschauen
+  - Alles Mögliche von #link("https://typst.app/universe/package/cram-snap")[CheatSheets] über #link("https://typst.app/universe/package/clean-print-cv")[CV] bis hin zu #link("https://typst.app/universe/package/chef-cookbook")[Rezeptbüchern]
+
 
 = Zitationen und Querverweise
 
@@ -680,17 +686,5 @@ Literatur wird im #link("https://de.wikipedia.org/wiki/BibTeX")["BibTeX-Format"]
   - BibTeX aus Webseite oder DOI: #link("https://www.act-act-act.com/doi2bib")[DOI2BIB]
   - BibTeX aus Pubmed-ID: #link("https://www.bibtex.com/c/pmid-to-bibtex-converter/")[PMID to BibTeX converter]
   - Viele weitere Converter #sym.arrow Google hilft
-
-== Typst Universe 
-
-Diverse Templates, die diese Techniken verwenden, sind im #link("https://typst.app/universe/search/?kind=templates")[Typst-Universe] vorhanden:
-- Vorlagen für wissenschaftliche Journals wie #link("https://typst.app/universe/package/charged-ieee")[IEEE], #link("https://typst.app/universe/package/graceful-genetics")[Oxford Physics] oder #link("https://typst.app/universe/package/splendid-mdpi")[MDPI]
-  - Befolgen oft gleiche Standard, aber Vorsicht, Argumentnamen für `#show` beachten!
-  - Gemeinsam online anschauen
-- Alles Mögliche von CheatSheets über ToDo-Listen bis hin zu Folien
-- Diverse Pakete, beispielsweise für #link("https://typst.app/universe/package/pintorita")[Graphen]
-- Integration diverser Programmiersprachen
-
-Die Möglichkeiten sind unbegrenzt, da Typst eine komplette Programmiersprache ist.
 
 #focus-slide[Bearbeitungszeit für Abgabe]
