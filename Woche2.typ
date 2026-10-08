@@ -244,6 +244,7 @@ haben die gleichen #col.
     ```,
     image("typ2.11.jpg")
   )
+  Dictionary: Bekannt aus letzter Woche\ `set page(margin: (top: 1em, bottom: 2em))`
 ]
 
 #only(6)[
@@ -259,6 +260,9 @@ haben die gleichen #col.
     ```,
     image("typ2.12.jpg")
   )
+  Randnotiz: `\` in Zeile 4 erzwingt Zeilenumbruch.
+
+  Seitenumbruch: `#pagebreak()` #doclink("https://typst.app/docs/reference/layout/pagebreak/").
 ]
 
 #only(7)[
@@ -304,7 +308,7 @@ haben die gleichen #col.
 
 == Scripting in Typst: Bedingungen
 
-- Bedingung: Tue etwas nur, falls...
+- Bedingung (der Vollständigkeit halber): Tue etwas nur, falls...
 
 #only(1)[
   #grid(
@@ -350,6 +354,9 @@ haben die gleichen #col.
     ```,
     image("typ2.16.jpg")
   )
+  Abfragemöglichkeiten in Bedingung (zusätzlich zu `==`, `<`, `>`):
+  - `value in arr`: "Ist `value` im Array `arr`"?
+  - `value not in arr`: "Ist `value` *nicht* im Array `arr`"?
 ]
 
 #only(3)[
@@ -461,25 +468,23 @@ email = "janey72@test.org"
 
 == Dynamisches Dokument: Beispiel
 
-#slide[
-```typst
+`#toml` #doclink("https://typst.app/docs/reference/data-loading/toml/") liefert eine Dictionary mit Werten aus toml-Datei.
+
+#grid(
+  columns: (2fr, 1fr),
+  gutter: 1em,
+  [
+    ```typst
+#set page(width: 7cm, height: 4cm)
 #let mails = toml("mails.toml")
-
-= Email-Liste
-
-Title: #mails.title \
-Version: #mails.version \
+= #mails.title
 
 #for c in mails.users [
-  #c.id: #c.name <#c.email>
-
+  #c.id: #c.name <#c.email>\ 
 ]
-```
-For-Schleife: Hier ohne Zählvariable, sondern "für jedes Element aus der Liste"
-][
-  ```toml
+    ```
+    ```toml
 title = "Private Kontakte"
-version = 1
 
 [[users]]
 id = 1
@@ -491,8 +496,25 @@ id = 2
 name = "Jane"
 email = "janey72@test.org"
   ```
-]
+  ],
+  [
+    #image("typ2.18.jpg")
+  ]
+)
 
+== Übungsaufgabe
+
+#grid(
+  columns: (3fr, 1fr),
+  gutter: 1em,
+  [
+    In Moodle unter "Materialien": Ordner "Hunderassen" mit mehreren Bildern.
+    - Bilder runterladen
+    - toml-Datei erstellen mit Bilddatei-Namen und Rassennamen
+    - Typst-Datei mit Liste von Rassen mit Bilder generieren (mit `#toml` und `#for`)
+  ],
+  image("typ2.19.jpg")
+)
 
 == Pakete
 
@@ -572,7 +594,7 @@ email = "janey72@test.org"
   )
 ]
 
-== Übungsaufgabe 1
+== Übungsaufgabe
 
 Dokument erstellen mit:
 
@@ -583,169 +605,38 @@ Dokument erstellen mit:
 - Textfluss um alle 3 Figures herum (meander)
 - Inhalt: Egal, kann auch `lorem()` sein.
 
-= Fortgeschrittenes Styling
+= Templating
 
-== Show-set
+== Funktionen
 
-Mittels `#show Bedingung: set Funktion(...)` kann die Formatierung von Elementen #link("https://typst.app/docs/tutorial/advanced-styling/")[beliebig komplex angepasst] werden, beispielsweise (mit #link("https://typst.app/docs/reference/foundations/selector/")[Selektoren] auch mit komplexen Bedingungen):
+- `#let` kann auch Funktion sein, gibt Content zurück
+- Argumente: Mit Namen oder positional
 
-#only(1)[
-  #grid(
-    columns: (2fr, 1fr),
-    gutter: 1cm,
-    ```typst
-#show heading : set text(fill: rgb("ff0000"))
-= Test
+== `#show`
 
-#show table.cell.where(y: 0): set text(weight: "bold")
-#table(
-  columns: (0.5fr, 1fr),
-  [Titel], [Zeile], 
-  [Andere], [Zeile]
-)
-    ```,
-    image("table1.png")
-  )
-]
+- Mit Selektor: Auf konkretes Element
+- Ohne Selektor: Auf ganzes Dokument, mit implizit `doc` am Ende
 
+== Template-Funktion
 
-== Eigene Funktionen
-
-Es ist möglich, mit `#let name(arg-Name1: Standardwert1, arg-Name2: Standardwert2) = {Typst-Code}` eigene #link("https://typst.app/docs/reference/foundations/function/")[Funktionen zu definieren], z.B.:
-
-#only(1)[
-  #grid(
-    columns: (2fr, 1fr),
-    gutter: 1cm,
-    ```typst
-#let boldanditalic(bold: "...", italic: "...") = {
-  [* #bold * and _ #italic _]
-}
-#boldanditalic(bold: "Text 1", italic: "Text 2")
-    ```,
-    image("bai.png")
-  )
-]
-
-== Anonyme Funktionen
-
-Beispiel im #link("https://typst.app/docs/guides/tables/")[Table Guide]. Hier "Anonyme Funktion", braucht keinen Namen und wird nur hier verwendet: `(argumente) => { Code }`
-
-#only(1)[
-  #grid(
-    columns: (2fr, 1fr),
-    gutter: 1cm,
-    ```typst
-#table(
-  fill: (x, y) => { 
-    if calc.even(y) { 
-      blue 
-    } 
-  },
-  columns: (0.5fr, 1fr),
-  ..for i in range(1,10) {
-    ([Row #i], [$i^2$: #(i*i)])
-  }
-)
-    ```,
-    image("table2.png")
-  )
-]
-
-== Templating
-
-Kombination von eigenen Funktionen und `show` erlaubt #link("https://typst.app/docs/tutorial/making-a-template/")[Templates für Dokumente], da `#show` implizit das Dokument als Argument übergibt (hier `#term`):
-
-#```typst
-#let amazed(term) = box([✨ #term ✨])
-#show: amazed /*Kein Selektor: Anwendung auf alles*/
-Das hier ist ein Dokumenttext
-```
-
-#image("amazed1.png")
-
-== Templating-Funktion mit Dokument
-
-Die Template-Funktion kann selber auch wieder `#show` enthalten:
-
-#only(1)[
-  #grid(
-    columns: (2fr, 1fr),
-    gutter: 1cm,
-    ```typst
-#let amazed(doc) = [ 
-  #set text(blue)
-  #show "Dokumenttext" : [
-    #text(
-      red, 
-      [veränderter Dokumentext]
-    )
-  ]
-  #doc
-]
-#show: amazed
-Das hier ist ein Dokumenttext
-    ```,
-    image("amazed2.png")
-  )
-]
-
-
-== Templating mit Namen
-
-Mit anonymen Funktionen kann die Template-Funktion auch mehr Argumente bekommen:
-
-#only(1)[
-  #grid(
-    columns: (2fr, 1fr),
-    gutter: 1cm,
-    ```typst
-#let amazed(author: "", titel: "", 
-            farbe: black, dokument: "") = [ 
-  #align(center, [#text(fill: farbe, [#titel])])
-  #align(right, [Geschrieben von: #author])
-  #dokument
-]
-#show: doc => amazed(
-  author: "Icke", titel: "Toller Text", 
-  titelfarbe: blue, dokument: doc
-)
-
-Das hier ist ein Dokumenttext
-    ```,
-    image("amazed3.png")
-  )
-]
-
-
-== Templating mit Template-Dateien
-
-Mit `#import` lassen sich Funktionen aus anderen Dateien importieren. Wenn das `#let amazed` von der vorherigen Folie in der Datei `amazing.typ` steht, funktioniert:
+- `function.with`: Argumente anwenden
 
 ```typst
-#import "amazing.typ": amazed
-#show: doc => amazed(author: "Icke", titel: "Toller Text", 
-                     titelfarbe: blue, dokument: doc)
+#let layout(title: "", author: "", doc) = [
+    #align(center)[#text(weight: "bold", size: 20pt)[#title]]
+    #align(right)[By #author]
 
-#lorem(100) /* Generiert Lorem-Ipsum-Text mit 100 Wörtern */
+#doc
+]
+
+#show: layout.with(title: "Ein Dokument", author: "icke")
+
+Bla Text
 ```
 
-Gemeinsam Template erweitern mit Hilfe der #link("https://typst.app/docs/")[Dokumentation]:
-- Blocksatz (Auf Englisch: "justified text")
-- Zwei Spalten (Titel: Google hilft, und man muss nicht alles verstehen)
+== Templates bei typst universe
 
-== Gruppenübung 2
-
-- Beispieldokument erstellen mit:
-  - Text
-  - Einer Tabelle mit mindestens 6 Zeilen und 4 Spalten
-  - Mehr Text
-- Zwei Templates erstellen, die als Argumente bekommen:
-  - Titel
-  - Autor
-  - Anzahl Spalten
-  - Zusatz: Hintergrundfarbe für gestreifte Tabellen (abwechselnde *Spaltenfarben*)
-- PDFs Herunterladen für das Dokument mit beiden Templates
+- Beispiele für Templates auf typst universe
 
 = Zitationen und Querverweise
 

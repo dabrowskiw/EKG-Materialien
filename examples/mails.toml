@@ -1,0 +1,11 @@
+title = "Private Kontakte"
+
+[[users]]
+id = 1
+name = "John"
+email = "john.doe@example.com"
+
+[[users]]
+id = 2
+name = "Jane"
+email = "janey72@test.org"
