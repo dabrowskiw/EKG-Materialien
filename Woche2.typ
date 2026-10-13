@@ -9,6 +9,15 @@
   institution-name: "HTW Berlin"
 )
 
+#let task=[
+- Abgabe: Kurzes "Paper" zu einem beliebigen Thema, mit mindestens:
+  - Angabe des Autors (oder der Autoren bei Gruppenabgabe, bis 3 Personen) - eingelesen *aus toml-Datei*
+  - 1 Abbildung (mit Unterschrift)
+  - 1 Tabelle (mit Unterschrift) #sym.arrow `#table` #doclink("https://typst.app/docs/guides/tables/")
+  - 2 Quellenangaben (im Text zitiert)
+  - Einem #link("https://typst.app/universe/search/?kind=templates")[Template] mit Link zum Template im Dokument
+  - Einem beliebigen weiteren Paketen aus Typst Universe 
+]
 
 = Allgemeines
 
@@ -18,13 +27,7 @@
   - Online in #link("https://typst.app")[Typst.app]
   - Oder lokal mit #link("https://katvan.app/")[Katvan]
 - Einfach weiter mitmachen und ausprobieren
-- Abgabe: Kurzes "Paper" zu einem beliebigen Thema, mit mindestens:
-  - Angabe des Autors (oder der Autoren bei Gruppenabgabe, bis 3 Personen - eingelesen *aus toml-Datei*)
-  - 1 Abbildung (mit Unterschrift)
-  - 1 Tabelle (mit Unterschrift)
-  - 2 Quellenangaben (im Text zitiert)
-  - Einem #link("https://typst.app/universe/search/?kind=templates")[Template] mit Link zum Template im Dokument
-  - Zwei beliebigen weiteren Paketen aus Typst Universe 
+#task
 
 = Typst-Grundlagen
 
@@ -605,34 +608,448 @@ Dokument erstellen mit:
 - Textfluss um beide Figures herum (meander)
 - Inhalt: Egal, kann auch `lorem()` sein.
 
+
 = Templating
 
 == Funktionen
 
-- `#let` kann auch Funktion sein, gibt Content zurück
+- Templates: Erlauben die Definition wiederverwendbarer Layouts
+- Umsetzung in Typst: Funktionen (Dokument-Content #sym.arrow Dokument-Content in korrektem Layout)
+- Dafür eigene Funktionen: `#let` kann auch Funktion definieren
 - Argumente: Mit Namen oder positional
+
+#only(1)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#let showauthor(
+  color: rgb("0000ff"), 
+  size: 12pt, 
+  author: "?"
+) = [
+    #align(right)[#text(fill: color, size: size, [By: #author])]
+]
+Das ist ein schlauer Satz!
+#showauthor()
+      ```
+      Named arguments mit Standardwerten
+    ],
+    image("typ2.20.jpg")
+  )
+]
+
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#let showauthor(
+  color: rgb("0000ff"), 
+  size: 12pt, 
+  author: "?"
+) = [
+    #align(right)[#text(fill: color, size: size, [By: #author])]
+]
+Das ist ein schlauer Satz!
+#showauthor(author: "Icke", color: red)
+      ```
+      Named: Optional, Reihenfolge egal
+    ],
+    image("typ2.21.jpg")
+  )
+]
+
+#only(3)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#let showauthor(
+  color: rgb("0000ff"), 
+  size: 12pt, 
+  author,
+  pseudonym
+) = [
+    #align(right)[#text(fill: color, size: size, [By: #author]), a.k.a. "#pseudonym"]
+]
+Das ist ein schlauer Satz!
+#showauthor(color: red, [Icke], [Jemand])
+      ```
+    ],
+    image("typ2.22.jpg")
+  )
+  #v(-0.6cm)
+  Ohne Namen: Positional, müssen angegeben werden!
+]
+
+#only(4)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#let showauthor(
+  color: rgb("0000ff"), 
+  size: 12pt, 
+  author,
+  pseudonym
+) = [
+    #align(right)[#text(fill: color, size: size, [By: #author]), a.k.a. "#pseudonym"]
+]
+Das ist ein schlauer Satz!
+#showauthor(color: red, [Icke])[Jemand]
+      ```
+    ],
+    image("typ2.22.jpg")
+  )
+  #v(-0.6cm)
+  Letztes Positional: Kann mit `#befehl(...)[arg]` dahinter.
+]
+
 
 == `#show`
 
-- Mit Selektor: Auf konkretes Element
-- Ohne Selektor: Auf ganzes Dokument, mit implizit `doc` am Ende
+`#show`: Funktion auf bestimmte Content-Blöcke anwenden
+
+#only(1)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 5cm, height: 6cm)
+#let amaze(color: rgb("0000ff"), txt) = [
+    #text(fill: color)[✨ #box(txt) ✨]
+]
+#amaze[toller Text], und mehr
+#amaze(color: orange)[toller Text]
+      ```
+      Anwendung:
+      - Blau auf alle Headings level 1
+      - Orange auf alle Headings level 1
+    ],
+    image("typ2.23.jpg")
+  )
+]
+
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 5cm, height: 6cm)
+#let amaze(color: rgb("0000ff"), txt) = [
+    #text(fill: color)[✨ #box(txt) ✨]
+]
+#show heading.where(level: 1): amaze
+= Kapitel
+== Unterkapitel
+== Unterkapitel
+= Kapitel
+== Unterkapitel
+      ```
+      Anwendung:
+      - Blau auf alle Headings level 1 #sym.checkmark
+      - Orange auf alle Headings level 1 
+    ],
+    image("typ2.24.jpg")
+  )
+]
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 5cm, height: 6cm)
+#let amaze(color: rgb("0000ff"), txt) = [
+    #text(fill: color)[✨ #box(txt) ✨]
+]
+#show heading.where(level: 1): amaze
+#show heading.where(level: 2): amaze.with(color: orange)
+= Kapitel
+== Unterkap
+== Unterkap
+= Kapitel
+== Unterkap
+      ```
+      Anwendung:
+      - Blau auf alle Headings level 1 #sym.checkmark
+      - Orange auf alle Headings level 1 #sym.checkmark
+    ],
+    image("typ2.25.jpg")
+  )
+  #sym.arrow `.with(...)`: Standard-Argumente "voranwenden".
+]
+
+#only(3)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 5cm, height: 6cm)
+#let amaze(color: rgb("0000ff"), txt) = [
+    #text(fill: color)[✨ #box(txt) ✨]
+]
+#show: amaze.with(color: orange)
+= Kapitel
+== Unterkap
+== Unterkap
+= Kapitel
+== Unterkap
+      ```
+  `#show` ohne Selektor: Auf alles anwenden
+
+  Randnotiz: Nur 2 ✨ wegen `#box`
+    ],
+    image("typ2.30.jpg")
+  )
+]
+
+#only(4)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 5cm, height: 6cm)
+#let amaze(color: rgb("0000ff"), txt) = [
+    #text(fill: color)[✨ #box(stroke: 1pt+black, txt) ✨]
+]
+#show: amaze.with(color: orange)
+= Kapitel
+== Unterkap
+== Unterkap
+= Kapitel
+== Unterkap
+      ```
+    ],
+    image("typ2.31.jpg")
+  )
+]
+
+/*== `#show`-Beispiel: `#table`
+
+Typische Anwendung: Styling von `#table` #doclink("https://typst.app/docs/guides/tables/").
+
+#only(1)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 10cm, height: 6.5cm)
+#table(
+    columns: (1cm, 2fr, 3fr),
+    [Nr.], [Wort], [Aussprache (IPA)],
+    [1.], [appreciation], [[əˌpɹiː.ʃiˈeɪ.ʃən]],
+    [2.], [excruciating], [[ɪkˈskɹuː.ʃi.eɪ.tɪŋ]],
+    [3.], [autodefenestrate], [[ˌɔː.təʊ.dɪˈfɛn.ɪ.stɹeɪt]],
+    [4.], [Streichhölzer], [[ˈʃtʁaɪ̯çˌhœlt͡sɐ]],
+    [5.], [Aufzeichnung], [[ˈaʊ̯fˌt͡saɪ̯çnʊŋ]],
+    [6.], [Eichhörnchen], [[ˈaɪ̯çˌhœʁnçən]],
+)
+      ```
+    ],
+    image("typ2.26.jpg")
+  )
+  Table: 
+  - Beliebig viele Content-Blöcke, auf gegebene Columns verteilt
+  - columns: Liste mit Breiten (absolut oder fr) oder Anzahl
+]
+
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      #codly(
+        highlighted-lines: (3,
+        )
+      )
+      ```typst
+#set page(width: 10cm, height: 6.5cm)
+#table(
+    columns: 3,
+    [Nr.], [Wort], [Aussprache (IPA)],
+    [1.], [appreciation], [[əˌpɹiː.ʃiˈeɪ.ʃən]],
+    [2.], [excruciating], [[ɪkˈskɹuː.ʃi.eɪ.tɪŋ]],
+    [3.], [autodefenestrate], [[ˌɔː.təʊ.dɪˈfɛn.ɪ.stɹeɪt]],
+    [4.], [Streichhölzer], [[ˈʃtʁaɪ̯çˌhœlt͡sɐ]],
+    [5.], [Aufzeichnung], [[ˈaʊ̯fˌt͡saɪ̯çnʊŋ]],
+    [6.], [Eichhörnchen], [[ˈaɪ̯çˌhœʁnçən]],
+)
+      ```
+    ],
+    image("typ2.27.jpg")
+  )
+  Implizit: Jeder Content-Block in `#table.cell` #doclink("https://typst.app/docs/reference/model/table/#definitions-cell")\ 
+  #sym.arrow Styling über `#show table.cell: funktion`
+]
+
+#only(3)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 10cm, height: 6.5cm)
+#show table.cell: strong
+#table(
+    columns: 3,
+    [Nr.], [Wort], [Aussprache (IPA)],
+    [1.], [appreciation], [[əˌpɹiː.ʃiˈeɪ.ʃən]],
+    [2.], [excruciating], [[ɪkˈskɹuː.ʃi.eɪ.tɪŋ]],
+    [3.], [autodefenestrate], [[ˌɔː.təʊ.dɪˈfɛn.ɪ.stɹeɪt]],
+    [4.], [Streichhölzer], [[ˈʃtʁaɪ̯çˌhœlt͡sɐ]],
+    [5.], [Aufzeichnung], [[ˈaʊ̯fˌt͡saɪ̯çnʊŋ]],
+    [6.], [Eichhörnchen], [[ˈaɪ̯çˌhœʁnçən]],
+)
+      ```
+    ],
+    image("typ2.28.jpg")
+  )
+  Eigenschaften von `#table.cell`: u.A. `x`, `y` #sym.arrow Header
+]
+
+#only(4)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 10cm, height: 6.5cm)
+#show table.cell.where(y: 0): strong
+#table(
+    columns: 3,
+    [Nr.], [Wort], [Aussprache (IPA)],
+    [1.], [appreciation], [[əˌpɹiː.ʃiˈeɪ.ʃən]],
+    [2.], [excruciating], [[ɪkˈskɹuː.ʃi.eɪ.tɪŋ]],
+    [3.], [autodefenestrate], [[ˌɔː.təʊ.dɪˈfɛn.ɪ.stɹeɪt]],
+    [4.], [Streichhölzer], [[ˈʃtʁaɪ̯çˌhœlt͡sɐ]],
+    [5.], [Aufzeichnung], [[ˈaʊ̯fˌt͡saɪ̯çnʊŋ]],
+    [6.], [Eichhörnchen], [[ˈaɪ̯çˌhœʁnçən]],
+)
+      ```
+    ],
+    image("typ2.29.jpg")
+  )
+]
+*/
 
 == Template-Funktion
 
-- `function.with`: Argumente anwenden
-
-```typst
+#only(1)[
+  `#show: function.with(...)` = "Template" für Dokumentlayout 
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 8cm, height: 10cm)
 #let layout(title: "", author: "", doc) = [
     #align(center)[#text(weight: "bold", size: 20pt)[#title]]
     #align(right)[By #author]
-
-#doc
+    #doc
 ]
 
 #show: layout.with(title: "Ein Dokument", author: "icke")
-
 Bla Text
-```
+      ```
+    ],
+    image("typ2.32.jpg")
+  )
+]
+
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```typst
+#set page(width: 8cm, height: 10cm)
+#let layout(title: "", author: "", abstract: "", doc) = [
+    #align(center)[#text(weight: "bold", size: 20pt)[#title]]
+    #align(right)[By #author]
+    #align(center)[
+        #text(style: "italic", size: 14pt)[Abstract]\ 
+        #text(style: "italic", size: 10pt)[#abstract]
+    ]
+    #set par(justify: true)
+    #set text(size: 12pt)
+    #doc
+]
+#show: layout.with(
+    title: "Ein Dokument", 
+    author: "icke",
+    abstract: "Ein Beispieldokument für Layouting in Typst",
+)
+#lorem(36)
+      ```
+    ],
+    [
+      #image("typ2.33.jpg")
+    ]
+  )
+]
+
+#only(3)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+  - `#import file.typ: function`: `file.typ` einlesen, `function` daraus importieren
+  - Beispiel: `#let layout(...) = [...]` in `layout.typ`, dann:
+      ```typst
+#import "layout.typ": layout
+#show: layout.with(
+    title: "Ein Dokument", 
+    author: "icke",
+    abstract: "Ein Beispieldokument für Layouting in Typst",
+)
+#lorem(36)
+      ```
+    ],
+    [
+      #image("typ2.33.jpg")
+    ]
+  )
+]
+
+#only(3)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+  - Selbes Dokument, nur `lyout.typ` verändert:
+      ```typst
+#let layout(title: "", author: "", abstract: "", doc) = [
+    #set text(hyphenate: true, lang: "de", size: 10pt)
+    #set page(columns: 2)
+    #align(center)[#text(weight: "bold", size: 18pt)[#title]]
+    #align(center)[By #author]
+    #align(left)[
+        #text(fill: blue)[Abstract]\ 
+        #text(style: "italic", size: 12pt)[#abstract]
+    ]
+    #set par(justify: false)
+    #doc
+]
+
+      ```
+    ],
+    [
+      #image("typ2.34.jpg")
+    ]
+  )
+]
+
 
 == Typst Universe 
 
@@ -681,10 +1098,88 @@ Literatur wird im #link("https://de.wikipedia.org/wiki/BibTeX")["BibTeX-Format"]
 - Separat in einer .bib-Datei
 - Diverse Tools existieren zum Generieren, z.B. #link("https://www.bibtex.com/c/isbn-to-bibtex-converter/")[ISBN in BibTeX]
 - Referenzierung mit `@NameAusBibTeX`
-- Einbindung der Datei mit #link("https://typst.app/docs/reference/model/bibliography/")[bibliography-Funktion]
+- Einbindung der Datei mit `#bibliography` #doclink("https://typst.app/docs/reference/model/bibliography/")
 - Beispiel: Gemeinsam online, mit unterschiedlichen Zitierstilen
   - BibTeX aus Webseite oder DOI: #link("https://www.act-act-act.com/doi2bib")[DOI2BIB]
   - BibTeX aus Pubmed-ID: #link("https://www.bibtex.com/c/pmid-to-bibtex-converter/")[PMID to BibTeX converter]
   - Viele weitere Converter #sym.arrow Google hilft
+
+== Beispiel Literaturangaben
+
+#only(1)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```bibtex
+@BOOK{Adams1999-aw,
+  title     = "Per Anhalter Durch Die Galaxis",
+  author    = "Adams, Douglas",
+  publisher = "Wilhelm Heyne Verlag",
+  month     =  sep,
+  year      =  1999,
+  address   = "Munchen, Germany",
+  language  = "de"
+}
+      ```
+      ```typst
+#set text(lang: "de")
+#set page(width: 8cm, height: 10cm)
+
+= Bücher!
+
+Es gibt viele Bücher, aber nur in einem steht alles, was man wissen muss @Adams1999-aw.
+
+#bibliography("example.bib")
+      ```
+    ],
+    [
+      #image("typ2.35.jpg")
+    ]
+  )
+]
+
+#only(2)[
+  #grid(
+    columns: (2fr, 1fr),
+    gutter: 1cm,
+    [
+      ```bibtex
+@BOOK{Adams1999-aw,
+  title     = "Per Anhalter Durch Die Galaxis",
+  author    = "Adams, Douglas",
+  publisher = "Wilhelm Heyne Verlag",
+  month     =  sep,
+  year      =  1999,
+  address   = "Munchen, Germany",
+  language  = "de"
+}
+      ```
+Zitierstil: `style: "..."`
+
+      ```typst
+#set text(lang: "de")
+#set page(width: 8cm, height: 10cm)
+
+= Bücher!
+
+Es gibt viele Bücher, aber nur in einem steht alles, was man wissen muss @Adams1999-aw.
+
+#bibliography(style: "chicago-notes", "example.bib")
+      ```
+    ],
+    [
+      #image("typ2.36.jpg")
+    ]
+  )
+]
+
+
+
+
+== Abgabe
+
+Zur Erinnerung:
+#task
 
 #focus-slide[Bearbeitungszeit für Abgabe]
